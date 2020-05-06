@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="product_header"> {{ product.name }} </h1>
+<table class="table">
+    <tr class="table-active">
+        <th>Photo</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Description</th>
+        <th>Average mark</th>
+        <th>Categories</th>
+    </tr>
+    <tr>
+        <th><img src="/static/img/{{ product.name_of_photo }}" alt="There should have been a picture of the product with the name {{ product.name }}"></th>
+        <th>{{product.name}}</th>
+        <th>{{product.price}}</th>
+        <th>{{product.description}}</th>
+        <th>{{average_mark}}</th>
+        <th>{{categories}}</th>
+    </tr>
+</table>
+
+{% if current_user.is_authenticated%}
+<div>
+    <a href="/add_to_basket_from_product_page/{{ product.id }}" class="btn btn-warning">Add to Basket</a>
+</div>
+{% endif %}
+
+{% if current_user.is_authenticated %}
+
+<h1>{{ exist }} review</h1>
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    {{ form.csrf_token }}
+    <p>
+    {{ form.review_field.label }}<br>
+    {{ form.review_field(class="form-control") }}<br>
+    {% for error in form.review_field.errors %}
+    <p class="alert alert-danger" role="alert">
+        {{ error }}
+    </p>
+    {% endfor %}
+    <p>
+        {{ form.mark.label }}<br>
+        {{ form.mark(class="form-control") }}<br>
+        {% for error in form.mark.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+    {{message}}
+</form>
+{% endif %}
+</p>
+<h2>Reviews</h2>
+{% for review in reviews %}
+    <p>_________________________________________________________</p>
+    <p>Author: {{ review[0] }}</p>
+    <p>{{ review[1].review }}</p>
+    <p>Mark: {{ review[1].mark }}</p>
+    {% if current_user.is_authenticated and current_user.id == 1 %}
+    <div>
+        <a href="/delete_review/{{ review[1].id }}/{{ product.id }}" class="btn btn-danger">Delete Review</a>
+    </div>
+    {% endif %}
+{% endfor %}
+{% endblock %}

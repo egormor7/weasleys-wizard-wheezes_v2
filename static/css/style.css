@@ -1,0 +1,46 @@
+
+.main
+{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.main__item
+{
+  padding: 10px;
+  margin-right: 30px;
+}
+
+.price-group
+{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    width: 30%;
+    margin-right: 30px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.middle-input-item
+{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.sorted-group
+{
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+@font-face {
+	font-family: MyUniqueFont;
+	src: url("10467.ttf");
+}
+
+h1 {
+	font-family: MyUniqueFont;
+	font-size: 550%;
+}

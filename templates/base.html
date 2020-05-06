@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/css/style.css">
+
+    <meta name="viewpoint" content="https://cdn.js.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha256-YLGeXaapI0/5IgZopewRJcFXomhRMlYYjugPLSyNjTY=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+
+    <title>{{title}}</title>
+</head>
+
+<header>
+    <div id="main" class="main">
+        <div class="main__item">
+            <a href="/"><h1 style="margin-left: 10px;">Лавка Уизли</h1></a><br>
+            <a class="navbar-brand" href="/"><h4 style="color:grey; margin-top:50px; margin-bottom:25px; margin-left: 10px;">Всевозможные вредилки только у нас</h4></a>
+        </div>
+        <div class="main__item">
+            <nav class="navbar navbar-light bg-light">
+                {% if current_user.is_authenticated %}
+                    <button type="button" class="btn btn-light" style="margin-left: 1660px;"><a class="navbar-brand" href="/logout">Log out {{ current_user.email }}</a></button>
+                    <a href="/basket" style="margin-left: 1800px;"><img src="/static/img/basket.jpg" ></a>
+                {% else %}
+                    <p>
+                        <a class="btn btn-primary " href="/register">Register</a>
+                        <a class="btn btn-success" href="/login">Log In</a>
+                    </p>
+                {% endif %}
+            </nav>
+        </div>
+    </div>
+    <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand" href="/"> На главную страницу</a>
+    </nav>
+</header>
+<!-- Begin page content -->
+
+<main role="main" class="container">
+    {% block content %}{% endblock %}
+</main>
+</body>
+</html>

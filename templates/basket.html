@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Basket</h1>
+<table class="table">
+<tr>
+    <th><h2>Cheque: {{ cost }}</h2></th>
+</tr>
+{% for product in products.keys() %}
+    <tr class="table-active">
+        <th>Photo</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Count</th>
+        <th>Change count</th>
+        <th>Delete</th>
+    </tr>
+    <tr>
+        <th><a href="/product_page/{{ product.id }}"><img src="/static/img/{{ product.name_of_photo }}" alt="There should have been a picture of the product with the name {{ product.name }}"></a></th>
+        <th>{{product.name}}</th>
+        <th>{{product.price}}</th>
+        <th>{{products[product]}}</th>
+        <th><a href="/basket_change_count/{{ product.id }}/1" ><img src="/static/img/plus.jpg" ></a><br>
+            <a href="/basket_change_count/{{ product.id }}/2" ><img src="/static/img/minus.jpg" ></a></th>
+        <th><a href="/basket_delete_product/{{ product.id }}" ><img src="/static/img/rubbish.jpg" ></a></th>
+    </tr>
+
+{% endfor %}
+<tr>
+    <th><h2>Cheque: {{ cost }}</h2></th>
+</tr>
+</table>
+{% endblock %}
