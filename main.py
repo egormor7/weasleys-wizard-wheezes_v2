@@ -19,6 +19,7 @@ app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
 
 class RegisterForm(FlaskForm):
+    """Форма регистрации пользователя"""
     email = EmailField('Email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     password_again = PasswordField('Repeat password', validators=[DataRequired()])
@@ -26,6 +27,7 @@ class RegisterForm(FlaskForm):
 
 
 class AddProductForm(FlaskForm):
+    """Форма добавления продукта"""
     name = StringField('Name of product', validators=[DataRequired()])
     name_of_photo = FileField('Name of photo of product that contains in /static/img',
                               validators=[DataRequired()])
@@ -37,6 +39,7 @@ class AddProductForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
+    """Форма авторизации пользователя"""
     email = EmailField('Email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField("Remember me")
@@ -44,6 +47,7 @@ class LoginForm(FlaskForm):
 
 
 class AddReview(FlaskForm):
+    """Форма добавления отзыва"""
     review_field = TextAreaField('Review', validators=[DataRequired()])
     mark = StringField('Mark: only number between 1 and 5', validators=[DataRequired()])
     submit = SubmitField('Submit')
@@ -51,6 +55,7 @@ class AddReview(FlaskForm):
 
 @login_manager.user_loader
 def load_user(user_id):
+    """Создание сессии и пользователя в current_user"""
     session = db_session.create_session()
     return session.query(Users).get(user_id)
 
@@ -58,12 +63,14 @@ def load_user(user_id):
 @app.route('/logout')
 @login_required
 def logout():
+    """Обработчик logout-а пользователя"""
     logout_user()
     return redirect("/")
 
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
+    """Обработчик главной страницы магазина"""
     global_init("db/shop.sqlite")
     session = db_session.create_session()
     products = session.query(Products).all()
@@ -175,6 +182,7 @@ def index():
 
 @app.route('/add_product', methods=['GET', 'POST'])
 def add_product():
+    """Обработчик добавления продукта"""
     form = AddProductForm()
     if form.validate_on_submit():
         session = db_session.create_session()
@@ -222,6 +230,7 @@ def add_product():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    """Обработчик авторизации пользователя"""
     form = LoginForm()
     if form.validate_on_submit():
         session = db_session.create_session()
@@ -237,6 +246,7 @@ def login():
 
 @app.route('/register', methods=['GET', 'POST'])
 def reqister():
+    """Обработчик регистрации пользователя"""
     form = RegisterForm()
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:
@@ -259,6 +269,7 @@ def reqister():
 @app.route('/products_delete/<int:id>', methods=['GET', 'POST'])
 @login_required
 def products_delete(id):
+    """Обработчик удаления продукта"""
     session = db_session.create_session()
     product = session.query(Products).filter(Products.id == id).\
         filter(current_user.id == 1).first()
@@ -273,6 +284,7 @@ def products_delete(id):
 @app.route('/add_product/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_product(id):
+    """Обработчик редактирования продукта"""
     form = AddProductForm()
     if request.method == "GET":
         session = db_session.create_session()
@@ -346,6 +358,7 @@ def edit_product(id):
 @app.route('/add_to_basket/<int:id>', methods=['GET', 'POST'])
 @login_required
 def add_to_basket(id):
+    """Обработчик добавления товара в корзину пользователем"""
     session = db_session.create_session()
     product = session.query(Products).filter(Products.id == id).first()
     user = session.query(Users).filter(Users.id == current_user.id).first()
@@ -368,6 +381,7 @@ def add_to_basket(id):
 @app.route('/basket', methods=['GET', 'POST'])
 @login_required
 def basket():
+    """Обработчик страницы с корзиной"""
     global_init("db/shop.sqlite")
     session = db_session.create_session()
     user = session.query(Users).filter(Users.id == current_user.id).first()
@@ -383,6 +397,7 @@ def basket():
 @app.route('/basket_change_count/<int:id>/<int:count>', methods=['GET', 'POST'])
 @login_required
 def increase_decrease_count_of_product_in_basket(id, count):
+    """Обработчик повышения и уменьшения кол-ва товара в корзине пользователем"""
     global_init("db/shop.sqlite")
     session = db_session.create_session()
     user = session.query(Users).filter(Users.id == current_user.id).first()
@@ -406,6 +421,7 @@ def increase_decrease_count_of_product_in_basket(id, count):
 
 @app.route('/product_page/<int:id>', methods=['GET', 'POST'])
 def product_page(id):
+    """Обработчик страницы непосредственно продукта"""
     global_init("db/shop.sqlite")
     session = db_session.create_session()
     product = session.query(Products).filter(Products.id == id).first()
@@ -478,6 +494,7 @@ def product_page(id):
 @app.route('/basket_delete_product/<int:id>', methods=['GET', 'POST'])
 @login_required
 def basket_delete_product(id):
+    """Обработчик удаления продукта из корзины пользователем"""
     session = db_session.create_session()
     user = session.query(Users).filter(Users.id == current_user.id).first()
     basket_to_delete = session.query(Basket).filter(Basket.product_id == id).\
@@ -499,6 +516,7 @@ def basket_delete_product(id):
 @app.route('/delete_review/<int:id>/<int:product_id>', methods=['GET', 'POST'])
 @login_required
 def delete_review(id, product_id):
+    """Обработчик удаления непристойных отзывов администратором"""
     session = db_session.create_session()
     review_to_delete = session.query(Reviews).filter(Reviews.id == id).first()
     if review_to_delete:
@@ -512,6 +530,7 @@ def delete_review(id, product_id):
 @app.route('/add_to_basket_from_product_page/<int:id>', methods=['GET', 'POST'])
 @login_required
 def add_to_basket_from_product_page(id):
+    """Обработчик добавления товара в корзину через страницу продукта"""
     session = db_session.create_session()
     product = session.query(Products).filter(Products.id == id).first()
     user = session.query(Users).filter(Users.id == current_user.id).first()
